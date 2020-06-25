@@ -1,0 +1,42 @@
+#rbac for developer restrict staging namespace
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: developer-staging
+  namespace: staging
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer-role
+  namespace: staging
+rules:
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["get", "watch", "list", "watch", "create", "update", "patch"]
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer-rolebinding
+  namespace: staging
+subjects:
+- kind: ServiceAccount
+  name: developer-staging
+  namespace: staging
+- kind: User
+  name: abdi@abdidarmawan.com
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: bobby@abdidarmawan.com
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: ci-cd-109@zeus-cloud-315880311.iam.gserviceaccount.com
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: developer-role
+  apiGroup: rbac.authorization.k8s.io
