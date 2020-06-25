@@ -1,2 +1,2 @@
-# rbac for developer access cluster gke
+# rbac for developer access to spesific namespace in cluster gke
 
