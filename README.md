@@ -4,5 +4,6 @@
 kubectl apply -f rbac.yml
 
 ### in gcp iam give user permission view only kubernetes
-![alt text](https://imgur.com/a/4IfTqxu)
+![alt text](https://i.imgur.com/LmYKRKE.png)
+
 
