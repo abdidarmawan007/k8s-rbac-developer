@@ -1,4 +1,4 @@
-#rbac for developer restrict staging namespace
+### rbac for developer restrict staging namespace ###
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -8,20 +8,17 @@ metadata:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: developer-role
+  name: pod-reader
   namespace: staging
 rules:
-- apiGroups: [""]
-  resources: ["pods/exec"]
-  verbs: ["get", "watch", "list", "watch", "create", "update", "patch"]
-- apiGroups: ["extensions", "apps"]
-  resources: ["deployments"]
-  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["deployments", "services", "pods/exec", "crontabs", "configmaps"]
+  verbs: ["get", "list", "watch"]    
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: developer-rolebinding
+  name: pod-reader
   namespace: staging
 subjects:
 - kind: ServiceAccount
@@ -38,5 +35,33 @@ subjects:
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
-  name: developer-role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+### rbac for read secret ###
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: secret-reader
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: developer-read-secret
+  namespace: staging
+subjects:
+- kind: ServiceAccount
+  name: developer-staging
+  namespace: staging
+- kind: User
+  name: abdi@abdidarmawan.com
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: secret-reader
   apiGroup: rbac.authorization.k8s.io
