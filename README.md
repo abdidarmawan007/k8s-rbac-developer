@@ -1,4 +1,6 @@
-## rbac for developer access to spesific namespace in cluster gke
+## RBAC for developer access to spesific namespace (for example staging) in cluster gke
+![alt text](https://i.imgur.com/4hPG81Z.png)
+
 
 ### create rbac for developer only cna access to namespace staging
 ```
