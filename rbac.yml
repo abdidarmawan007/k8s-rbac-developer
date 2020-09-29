@@ -12,7 +12,7 @@ metadata:
   namespace: staging
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["ingresses", deployments", "services", "pods/exec", "crontabs", "configmaps"]
+  resources: ["ingresses", deployments", "services", "pods/exec", "pods", "crontabs", "configmaps"]
   verbs: ["get", "list", "watch"]    
 ---
 kind: RoleBinding
