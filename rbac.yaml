@@ -21,7 +21,7 @@ rules:
   resources: ["horizontalpodautoscalers"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["networking.istio.io"]
-  resources: ["destinationrules", "virtualservice", "gateway"]
+  resources: ["destinationrules", "virtualservices", "gateway"]
   verbs: ["get", "list", "watch",]
 ---
 kind: RoleBinding
