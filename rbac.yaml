@@ -12,14 +12,17 @@ metadata:
   namespace: staging
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["ingresses", "services", "deployments", "pods", "pods/exec", "pods/log", "crontabs", "configmaps"]
+  resources: ["ingresses", "services", "deployments", "pods", "pods/log", "crontabs", "configmaps"]
   verbs: ["get", "list", "watch"]
 - apiGroups: [""]
-  resources: ["pods/portforward"]
-  verbs: ["get", "list", "create"]
+  resources: ["pods/exec", "pods/portforward"]
+  verbs: ["create"]
 - apiGroups: ["autoscaling"]
   resources: ["horizontalpodautoscalers"]
-  verbs: ["get", "list", "watch"]  
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.istio.io"]
+  resources: ["destinationrules", "virtualservice", "gateway"]
+  verbs: ["get", "list", "watch",]
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
