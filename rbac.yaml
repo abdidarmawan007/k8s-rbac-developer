@@ -55,10 +55,10 @@ subjects:
   name: staging-engineer
   namespace: staging
 - kind: User
-  name: abdi@makan.com
+  name: abdi@abdidarmawan.com
   apiGroup: rbac.authorization.k8s.io
 - kind: User
-  name: agus@makan.com
+  name: agus@abdidarmawan.com
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
