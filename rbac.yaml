@@ -1,76 +1,66 @@
-### rbac for developer restrict staging namespace ###
+# rbac for engineer restrict staging namespace
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: developer-staging
+  name: engineer-staging
   namespace: staging
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: developer-role
+  name: engineer-role
   namespace: staging
 rules:
-- apiGroups: [""] # "" indicates the core API group
-  resources: ["ingresses", "services", "deployments", "pods", "pods/log", "crontabs", "configmaps"]
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
   verbs: ["get", "list", "watch"]
 - apiGroups: [""]
-  resources: ["pods/exec", "pods/portforward"]
+  resources: ["pods/attach"]
+  verbs: ["create"]  
+- apiGroups: [""]
+  resources: ["pods/portforward"]
   verbs: ["create"]
+#- apiGroups: [""]
+#  resources: ["pods/exec"]
+#  verbs: ["create"]  
+- apiGroups: ["extensions", "apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "patch"]  
 - apiGroups: ["autoscaling"]
   resources: ["horizontalpodautoscalers"]
+  verbs: ["get", "list", "watch", "patch"]
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list", "watch"]  
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["crontabs"]
   verbs: ["get", "list", "watch"]
 - apiGroups: ["networking.istio.io"]
-  resources: ["destinationrules", "virtualservices", "gateway"]
+  resources: ["destinationrules", "virtualservices"]
   verbs: ["get", "list", "watch",]
+- apiGroups: ["networking.istio.io"]
+  resources: ["gateway"]
+  verbs: ["get", "list", "watch",]  
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: developer-role
+  name: engineer-rolebinding
   namespace: staging
 subjects:
 - kind: ServiceAccount
-  name: developer-staging
+  name: engineer-staging
   namespace: staging
 - kind: User
-  name: abdi@abdidarmawan.com
+  name: abdidarmawan@makan.com
   apiGroup: rbac.authorization.k8s.io
 - kind: User
-  name: bobby@abdidarmawan.com
-  apiGroup: rbac.authorization.k8s.io
-- kind: User
-  name: ci-cd-109@zeus-cloud-315880311.iam.gserviceaccount.com
+  name: agusn@makan.com
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
-  name: developer-role
-  apiGroup: rbac.authorization.k8s.io
----
-### rbac for read secret ###
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  # "namespace" omitted since ClusterRoles are not namespaced
-  name: secret-reader
-rules:
-- apiGroups: [""] # "" indicates the core API group
-  resources: ["secrets"]
-  verbs: ["get", "watch", "list"]
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: developer-read-secret
-  namespace: staging
-subjects:
-- kind: ServiceAccount
-  name: developer-staging
-  namespace: staging
-- kind: User
-  name: abdi@abdidarmawan.com
-  apiGroup: rbac.authorization.k8s.io
-roleRef:
-  kind: Role
-  name: secret-reader
+  name: engineer-role
   apiGroup: rbac.authorization.k8s.io
